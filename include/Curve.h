@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <cmath>
+#include <memory>
+#include <iostream>
 
 struct Point {
     double x = {};
@@ -51,5 +53,32 @@ private:
 	double step = {};
 };
 
+std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector ();
+
+
+template<typename T>
+void print_curve_details(const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& curves,T t_point) {
+	std::cout << "--Вывести координаты каждой кривой и производной в точке t = pi /4--" << std::endl;
+	for(auto& curve : *curves){
+
+		if      (typeid(*curve) == typeid(Circle))
+			std::cout << "Круг" << std::endl;
+		else if (typeid(*curve) == typeid(Ellipse))
+			std::cout << "Эллипс" << std::endl;
+		else if (typeid(*curve) == typeid(Helix))
+			std::cout << "Спираль" << std::endl;
+	
+		std::cout << "\nТочка" << std::endl;
+		std::cout << "x: "   << curve->getPoint(t_point).x << 
+								 "\ty: " << curve->getPoint(t_point).y <<
+								 "\tz: " << curve->getPoint(t_point).z <<  std::endl;
+								 
+		std::cout << "Производная" << std::endl;
+		std::cout << "x: "   << curve->getDerivative(t_point).x << 
+								 "\ty: " << curve->getDerivative(t_point).y << 
+								 "\tz: " << curve->getDerivative(t_point).z <<  std::endl;
+		std::cout << "\n" << std::endl;
+	}
+};
 
 #endif
