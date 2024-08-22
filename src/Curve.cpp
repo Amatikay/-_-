@@ -60,7 +60,7 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 	  * будет использоваться это генератор. Данное упрощение не противоречит условию. 
 	  */
 	  std::uniform_int_distribution<>  idistr(3,100); 
-	  std::uniform_real_distribution<> rdistr(0,20);
+	  std::uniform_real_distribution<> rdistr(-100,100);
 	  std::uniform_int_distribution<>  curvedistr(1,3);
 	  
 	  bool isCircle  = false;
