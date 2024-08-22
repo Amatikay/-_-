@@ -53,6 +53,9 @@ private:
 
 std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector ();
 
+void move_circles_to_second_vector (
+const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& curves,
+const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& circles);
 
 template<typename T>
 void print_curve_details(const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& curves,T t_point) {

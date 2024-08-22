@@ -63,7 +63,7 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 	  * будет использоваться это генератор. Данное упрощение не противоречит условию. 
 	  */
 	  std::uniform_int_distribution<>  idistr(3,100); 
-	  std::uniform_real_distribution<> rdistr(-100,100);
+	  std::uniform_real_distribution<> rdistr(-1,100);
 	  std::uniform_int_distribution<>  curvedistr(1,3);
 	  
 	  bool isCircle  = false;
@@ -117,21 +117,35 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 		/*
 		* Добавить, если не хватает какого то из элементов
 		*/
-		// if (!isCircle) {
-		// 	curves->push_back(std::make_unique<Circle>(rdistr(gen)));
-		// 	isCircle = true;
-		// }
-		// if (!isEllipse) {
-		// 	curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
-		// 	isEllipse = true;
-		// }
-		// if (!isHelix) {
-		// 	curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
-		// 	isHelix = true;
-		// }
+		if (!isCircle) {
+			curves->push_back(std::make_unique<Circle>());
+			isCircle = true;
+		}
+		if (!isEllipse) {
+			curves->push_back(std::make_unique<Ellipse>());
+			isEllipse = true;
+		}
+		if (!isHelix) {
+			curves->push_back(std::make_unique<Helix>());
+			isHelix = true;
+		}
 	}
 	
 	return curves;
+};
+
+void move_circles_to_second_vector (
+const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& curves,
+const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& circles){
+	
+	for (auto it = curves->begin(); it != curves->end(); ) {
+  	if (typeid(**it) == typeid(Circle)) {
+    	circles->push_back(std::move(*it));
+      it = curves->erase(it);  
+    } else {
+    ++it; 
+    }
+  }
 };
 
 
