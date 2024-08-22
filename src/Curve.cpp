@@ -7,7 +7,7 @@
 
 Circle::Circle(const double& p_radius) : radius(p_radius){
 		if (p_radius < 0) {
-			throw std::invalid_argument("Отрицательный радиус");
+			throw std::invalid_argument("Отрицательный радиус круга");
 		}
 };
 
@@ -21,8 +21,11 @@ Point Circle::getDerivative(const double& t){
 
 Ellipse::Ellipse(const double& p_radi_a, const double& p_radi_b): 
 								 radi_a(p_radi_a), radi_b(p_radi_b){
-	if (p_radi_a < 0 || p_radi_b < 0){
-		throw std::invalid_argument("Отрицательный радиус");
+	if 			(p_radi_a < 0 ){
+		throw std::invalid_argument("Отрицательный радиус a эллипса");
+	}
+	else if (p_radi_b < 0){
+		throw std::invalid_argument("Отрицательный радиус b эллипса");
 	}
 };
 
@@ -37,7 +40,7 @@ Point Ellipse::getDerivative(const double& t){
 Helix::Helix(const double& p_radius, const double& p_step): 
 						 radius(p_radius), step(p_step){
 	if (p_radius < 0){
-		throw std::invalid_argument("Отрицательный радиус");
+		throw std::invalid_argument("Отрицательный радиус спирали");
 	}
 };
 
@@ -94,7 +97,7 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 						}
 						catch (std::invalid_argument& error ) {
 							std::cerr << error.what() << std::endl;
-							curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
+							curves->push_back(std::make_unique<Ellipse>());
 							isEllipse  = true;
 							
 						}
@@ -106,7 +109,7 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 						}
 						catch (std::invalid_argument& error ) {
 							std::cerr << error.what() << std::endl;
-							curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
+							curves->push_back(std::make_unique<Helix>());
 							isHelix  = true;
 						}
 						break;
@@ -114,18 +117,18 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 		/*
 		* Добавить, если не хватает какого то из элементов
 		*/
-		if (!isCircle) {
-			curves->push_back(std::make_unique<Circle>(rdistr(gen)));
-			isCircle = true;
-		}
-		if (!isEllipse) {
-			curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
-			isEllipse = true;
-		}
-		if (!isHelix) {
-			curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
-			isHelix = true;
-		}
+		// if (!isCircle) {
+		// 	curves->push_back(std::make_unique<Circle>(rdistr(gen)));
+		// 	isCircle = true;
+		// }
+		// if (!isEllipse) {
+		// 	curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
+		// 	isEllipse = true;
+		// }
+		// if (!isHelix) {
+		// 	curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
+		// 	isHelix = true;
+		// }
 	}
 	
 	return curves;
