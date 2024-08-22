@@ -69,58 +69,66 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 	  
 	 	int vector_size = idistr(gen);
 		auto curves = std::make_unique<std::vector<std::unique_ptr<ICurve>>>();
-
-		/*
-		* Каждая итерация начинается с пустого вектора
-		* Пока вектор не будет заполнен всеми типами 
-		* Начинать заново
-		*/
-
 		/*
 		* Если передан отрацательный аргумент - пусть вызывается 
 		* Конструктор по умолчанию.
 		*/
-		
-	  while ((isCircle && isEllipse && isHelix) == false ){  // Пока в векторе не будут все кривые
-			curves->clear();
 			for (int i = 0; i < vector_size; ++i){
 				int curve_number = curvedistr(gen);
 				switch(curve_number){
 					case 1:
 						try{
 							curves->push_back(std::make_unique<Circle>(rdistr(gen)));
+							isCircle  = true;
 						}
 						catch (std::invalid_argument& error ) {
-							std::cerr <<  error.what() << std::endl;
+							std::cerr << error.what() << std::endl;
 							curves->push_back(std::make_unique<Circle>());
+							isCircle  = true;
 						}
-						isCircle  = true;
 						break;
 					case 2:
 						try{
 							curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
+							isEllipse  = true;
 						}
 						catch (std::invalid_argument& error ) {
-							std::cerr <<  error.what() << std::endl;
-							curves->push_back(std::make_unique<Ellipse>());
+							std::cerr << error.what() << std::endl;
+							curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
+							isEllipse  = true;
+							
 						}
-						isEllipse  = true;
 						break;
 					case 3:
 						try{
 							curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
+							isHelix  = true;
 						}
 						catch (std::invalid_argument& error ) {
-							std::cerr <<  error.what() << std::endl;
-							curves->push_back(std::make_unique<Helix>());
+							std::cerr << error.what() << std::endl;
+							curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
 							isHelix  = true;
 						}
 						break;
 				}
-			}
-			
+		/*
+		* Добавить, если не хватает какого то из элементов
+		*/
+		if (!isCircle) {
+			curves->push_back(std::make_unique<Circle>(rdistr(gen)));
+			isCircle = true;
 		}
-		return curves;
+		if (!isEllipse) {
+			curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
+			isEllipse = true;
+		}
+		if (!isHelix) {
+			curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
+			isHelix = true;
+		}
+	}
+	
+	return curves;
 };
 
 
