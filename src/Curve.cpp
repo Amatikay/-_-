@@ -2,8 +2,14 @@
 #include <random>
 #include <memory>
 #include <vector>
+#include <stdexcept>
+	
 
-
+Circle::Circle(const double& p_radius) : radius(p_radius){
+		if (p_radius < 0) {
+			throw std::invalid_argument("Отрицательный радиус");
+		}
+};
 
 Point Circle::getPoint(const double& t){
 	return {radius * cos(t), radius * sin(t)};	
@@ -13,12 +19,26 @@ Point Circle::getDerivative(const double& t){
 	return {-1 * radius * sin(t), radius * cos(t)};
 };
 
+Ellipse::Ellipse(const double& p_radi_a, const double& p_radi_b): 
+								 radi_a(p_radi_a), radi_b(p_radi_b){
+	if (p_radi_a < 0 || p_radi_b < 0){
+		throw std::invalid_argument("Отрицательный радиус");
+	}
+};
+
 Point Ellipse::getPoint(const double& t){
 	return {radi_a * cos(t), radi_b * sin(t)};	
 };
 
 Point Ellipse::getDerivative(const double& t){
 	return {-1 * radi_a * sin(t), radi_b * cos(t)};
+};
+
+Helix::Helix(const double& p_radius, const double& p_step): 
+						 radius(p_radius), step(p_step){
+	if (p_radius < 0){
+		throw std::invalid_argument("Отрицательный радиус");
+	}
 };
 
 Point Helix::getPoint(const double& t){
@@ -55,6 +75,11 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 		* Пока вектор не будет заполнен всеми типами 
 		* Начинать заново
 		*/
+
+		/*
+		* Если передан отрацательный аргумент - пусть вызывается 
+		* Конструктор по умолчанию.
+		*/
 		
 	  while ((isCircle && isEllipse && isHelix) == false ){  // Пока в векторе не будут все кривые
 			curves->clear();
@@ -62,16 +87,34 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector (){
 				int curve_number = curvedistr(gen);
 				switch(curve_number){
 					case 1:
-						curves->push_back(std::make_unique<Circle>(rdistr(gen)));
+						try{
+							curves->push_back(std::make_unique<Circle>(rdistr(gen)));
+						}
+						catch (std::invalid_argument& error ) {
+							std::cerr <<  error.what() << std::endl;
+							curves->push_back(std::make_unique<Circle>());
+						}
 						isCircle  = true;
 						break;
 					case 2:
-						curves->push_back(std::make_unique<Ellipse>(rdistr(gen), (rdistr(gen))));
-						isEllipse = true;
+						try{
+							curves->push_back(std::make_unique<Ellipse>(rdistr(gen), rdistr(gen)));
+						}
+						catch (std::invalid_argument& error ) {
+							std::cerr <<  error.what() << std::endl;
+							curves->push_back(std::make_unique<Ellipse>());
+						}
+						isEllipse  = true;
 						break;
 					case 3:
-						curves->push_back(std::make_unique<Helix>(rdistr(gen), (rdistr(gen))));
-						isHelix   = true;
+						try{
+							curves->push_back(std::make_unique<Helix>(rdistr(gen), idistr(gen)));
+						}
+						catch (std::invalid_argument& error ) {
+							std::cerr <<  error.what() << std::endl;
+							curves->push_back(std::make_unique<Helix>());
+							isHelix  = true;
+						}
 						break;
 				}
 			}

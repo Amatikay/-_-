@@ -22,7 +22,7 @@ public:
 class Circle : public ICurve {
 public:
 	Circle() {};
-	Circle(const double& p_radius) : radius(p_radius){};
+	Circle(const double& p_radius);
 	Point getPoint(const double& t) override;
 	Point getDerivative(const double& t) override;
 private:
@@ -31,8 +31,7 @@ private:
 
 class Ellipse : public ICurve {
 public:
-	Ellipse(const double& p_radi_a, const double& p_radi_b): 
-											 radi_a(p_radi_a), radi_b(p_radi_b){};	
+	Ellipse(const double& p_radi_a, const double& p_radi_b);
 	Ellipse() {};
 	Point getPoint (const double& t) override;
 	Point getDerivative(const double& t) override;
@@ -43,8 +42,7 @@ private:
 
 class Helix : public ICurve {
 public:
-	Helix(const double& p_radius, const double& p_step): 
-											 radius(p_radius), step(p_step){};	
+	Helix(const double& p_radius, const double& p_step);	
 	Helix() {};
 	Point getPoint (const double& t) override;
 	Point getDerivative(const double& t) override;
