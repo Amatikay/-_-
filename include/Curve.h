@@ -16,7 +16,9 @@ class ICurve {
 public:
 	virtual Point getPoint(const double& t) = 0;
 	virtual Point getDerivative (const double& t) = 0;
+	// virtual double getRadius () = 0;
 	virtual ~ICurve () = default;
+	
 };
 
 class Circle : public ICurve {
@@ -25,6 +27,7 @@ public:
 	Circle(const double& p_radius);
 	Point getPoint(const double& t) override;
 	Point getDerivative(const double& t) override;
+	double getRadius() const {return radius;};
 private:
 	double radius = {};
 };
@@ -56,6 +59,7 @@ std::unique_ptr<std::vector<std::unique_ptr<ICurve>>> create_first_vector ();
 void move_circles_to_second_vector (
 const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& curves,
 const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& circles);
+double total_radii_sum_circles(const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& circles);
 
 template<typename T>
 void print_curve_details(const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& curves,T t_point) {

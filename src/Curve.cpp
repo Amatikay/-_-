@@ -148,4 +148,13 @@ const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& circles){
   }
 };
 
+double total_radii_sum_circles(const std::unique_ptr<std::vector<std::unique_ptr<ICurve>>>& circles){
+	double total_sum = 0;
+	for(auto& circle : *circles){
+		const Circle* tmp_circle = dynamic_cast<const Circle*>(circle.get());
+		total_sum = total_sum + tmp_circle->getRadius();
+	}
+	return total_sum;
+};
+
 
